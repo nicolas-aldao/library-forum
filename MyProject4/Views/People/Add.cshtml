@@ -1,0 +1,50 @@
+﻿@model MyProject4.Models.ViewModel.PeopleViewModel
+@{
+    ViewBag.Title = "Add";
+}
+
+<h2>Add</h2>
+
+
+<form>
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(d => d.Name) 
+            @Html.TextBoxFor(d => d.Name, new { id = "Name" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(d => d.Age)
+            @Html.TextBoxFor(d => d.Age, new { id = "Age" })
+            @*in both fields we can reference them by name that is by default, but here we add an id for both*@
+        </div>
+        <input type="button" value="Guardar" onclick="jsAdd()" />
+    </div>
+</form>
+
+<script>
+    var url = "@Url.Content("~/People/Save")";
+    function jsAdd() {
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify({
+                Name: document.getElementById("Name").value,
+                Age: document.getElementById("Age").value
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        }).then(function (response) {
+            if (response.ok)
+                return response.text();
+            else
+                alert("Ha ocurrido un error");
+        }).then(function (data) {
+            if (data != "1") {
+                alert(data);
+            } else {
+                document.location.href = "@Url.Content("~/People/")";
+            }
+        });
+    }
+</script>

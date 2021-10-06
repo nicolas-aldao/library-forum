@@ -1,0 +1,32 @@
+﻿@using MyProject4.Models.ViewModel;
+@model List<ListPeopleViewModel>
+@{
+    ViewBag.Title = "List";
+}
+@{ Layout = null; }
+
+<h2>List</h2>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td scope="row">@p.Name</td>
+                <td>
+                    <input onclick="document.location.href='@Url.Content("~/People/edit/?id="+ p.Id)'" type="button" value="Editar" class="btn btn-info" />
+                </td>
+                <td>
+                    <input onclick="jsDelete(@p.Id)" type="button" value="Borrar" class="btn btn-danger" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
