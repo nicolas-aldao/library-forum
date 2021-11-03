@@ -15,6 +15,10 @@ namespace MyProject4.Models
     public partial class Books
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int TitleId { get; set; }
+        public Nullable<int> PersonId { get; set; }
+    
+        public virtual Titles Titles { get; set; }
+        public virtual People People { get; set; }
     }
 }

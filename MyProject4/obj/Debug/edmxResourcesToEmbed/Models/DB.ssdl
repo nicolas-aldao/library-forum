@@ -3,13 +3,22 @@
   <EntityContainer Name="MVCProjectModelStoreContainer">
     <EntitySet Name="People" EntityType="MVCProjectModel.Store.People" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Books" EntityType="MVCProjectModel.Store.Books" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Titles" EntityType="MVCProjectModel.Store.Titles" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="TitlesBooks" Association="MVCProjectModel.Store.TitlesBooks">
+      <End Role="Titles" EntitySet="Titles" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="PeopleBooks" Association="MVCProjectModel.Store.PeopleBooks">
+      <End Role="People" EntitySet="People" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="People">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="varchar" Nullable="true" MaxLength="50" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
     <Property Name="Age" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Books">
@@ -17,6 +26,38 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleId" Type="int" Nullable="false" />
+    <Property Name="PersonId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Titles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <Association Name="TitlesBooks">
+    <End Role="Titles" Type="MVCProjectModel.Store.Titles" Multiplicity="1" />
+    <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Titles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="TitleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PeopleBooks">
+    <End Role="People" Type="MVCProjectModel.Store.People" Multiplicity="0..1" />
+    <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="PersonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

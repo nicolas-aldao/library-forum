@@ -14,6 +14,15 @@
       <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Books)">
         <MappingFragment StoreEntitySet="Books">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Titles">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Titles)">
+        <MappingFragment StoreEntitySet="Titles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>

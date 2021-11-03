@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using MyProject4.Models;
 using MyProject4.Models.ViewModel;
+using Newtonsoft.Json;
 
 namespace MyProject4.Controllers
 {
@@ -51,11 +54,19 @@ namespace MyProject4.Controllers
                     db.People.Add(oPeople);
                     db.SaveChanges();
                 }
+                //return RedirectToAction("List");
+                //return RedirectToAction("List", model);
                 return Content("1");
             }
-            catch(Exception ex)
+            catch(DbEntityValidationException ex)
             {
-                return Content(ex.Message);
+                var errorMessages = ex.EntityValidationErrors
+                    .SelectMany(x => x.ValidationErrors);
+
+                JsonResult categoryJson = new JsonResult();
+                categoryJson.Data = errorMessages;
+
+                return Json(categoryJson.Data);
             }
         }
 

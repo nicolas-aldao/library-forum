@@ -8,13 +8,22 @@
   <EntityContainer Name="MVCProjectModelStoreContainer">
     <EntitySet Name="People" EntityType="MVCProjectModel.Store.People" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Books" EntityType="MVCProjectModel.Store.Books" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Titles" EntityType="MVCProjectModel.Store.Titles" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="TitlesBooks" Association="MVCProjectModel.Store.TitlesBooks">
+      <End Role="Titles" EntitySet="Titles" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="PeopleBooks" Association="MVCProjectModel.Store.PeopleBooks">
+      <End Role="People" EntitySet="People" />
+      <End Role="Books" EntitySet="Books" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="People">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="varchar" Nullable="true" MaxLength="50" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
     <Property Name="Age" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Books">
@@ -22,8 +31,40 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleId" Type="int" Nullable="false" />
+    <Property Name="PersonId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Titles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
+  <Association Name="TitlesBooks">
+    <End Role="Titles" Type="MVCProjectModel.Store.Titles" Multiplicity="1" />
+    <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Titles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="TitleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PeopleBooks">
+    <End Role="People" Type="MVCProjectModel.Store.People" Multiplicity="0..1" />
+    <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="People">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Books">
+        <PropertyRef Name="PersonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -31,22 +72,67 @@
         <EntityContainer Name="MVCProjectEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="People" EntityType="MVCProjectModel.People" />
           <EntitySet Name="Books" EntityType="MVCProjectModel.Books" />
+          <EntitySet Name="Titles" EntityType="MVCProjectModel.Titles" />
+          <AssociationSet Name="TitlesBooks" Association="MVCProjectModel.TitlesBooks">
+            <End Role="Titles" EntitySet="Titles" />
+            <End Role="Books" EntitySet="Books" />
+          </AssociationSet>
+          <AssociationSet Name="PeopleBooks" Association="MVCProjectModel.PeopleBooks">
+            <End Role="People" EntitySet="People" />
+            <End Role="Books" EntitySet="Books" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="People">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Age" Type="Int32" />
+          <NavigationProperty Name="Books" Relationship="MVCProjectModel.PeopleBooks" FromRole="People" ToRole="Books" />
         </EntityType>
         <EntityType Name="Books">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Titles" Relationship="MVCProjectModel.TitlesBooks" FromRole="Books" ToRole="Titles" />
+          <Property Name="TitleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="People" Relationship="MVCProjectModel.PeopleBooks" FromRole="Books" ToRole="People" />
+          <Property Name="PersonId" Type="Int32" Nullable="true" />
         </EntityType>
+        <EntityType Name="Titles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Books" Relationship="MVCProjectModel.TitlesBooks" FromRole="Titles" ToRole="Books" />
+        </EntityType>
+        <Association Name="TitlesBooks">
+          <End Type="MVCProjectModel.Titles" Role="Titles" Multiplicity="1" />
+          <End Type="MVCProjectModel.Books" Role="Books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Titles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Books">
+              <PropertyRef Name="TitleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PeopleBooks">
+          <End Type="MVCProjectModel.People" Role="People" Multiplicity="0..1" />
+          <End Type="MVCProjectModel.Books" Role="Books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="People">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Books">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -65,6 +151,15 @@
     <EntitySetMapping Name="Books">
       <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Books)">
         <MappingFragment StoreEntitySet="Books">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TitleId" ColumnName="TitleId" />
+          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Titles">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Titles)">
+        <MappingFragment StoreEntitySet="Titles">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>

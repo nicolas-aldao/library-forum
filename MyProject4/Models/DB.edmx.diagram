@@ -5,8 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="69c7ac6d5ea749ceb291793a6f01278b" Name="Diagram1">
-        <EntityTypeShape EntityType="MVCProjectModel.People" Width="1.5" PointX="1.5" PointY="0.75" />
-        <EntityTypeShape EntityType="MVCProjectModel.Books" Width="1.5" PointX="4" PointY="0.75" />
+        <EntityTypeShape EntityType="MVCProjectModel.People" Width="1.5" PointX="0.625" PointY="1.25" />
+        <EntityTypeShape EntityType="MVCProjectModel.Books" Width="1.5" PointX="6.5" PointY="1.125" />
+        <EntityTypeShape EntityType="MVCProjectModel.Titles" Width="1.5" PointX="3.75" PointY="0.5" />
+        <AssociationConnector Association="MVCProjectModel.TitlesBooks" />
+        <AssociationConnector Association="MVCProjectModel.PeopleBooks" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

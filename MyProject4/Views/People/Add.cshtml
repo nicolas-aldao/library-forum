@@ -6,22 +6,31 @@
 <h2>Add</h2>
 
 
-<form>
-    <div class="row">
-        <div class="form-group">
-            @Html.LabelFor(d => d.Name) 
-            @Html.TextBoxFor(d => d.Name, new { id = "Name" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(d => d.Age)
-            @Html.TextBoxFor(d => d.Age, new { id = "Age" })
-            @*in both fields we can reference them by name that is by default, but here we add an id for both*@
-        </div>
-        <input type="button" value="Guardar" onclick="jsAdd()" />
+<form id="FormAddPerson">
+    <div class="form-group mb-3">
+        @Html.LabelFor(d => d.Name) 
+        @Html.TextBoxFor(d => d.Name, new { id = "Name", @class = "form-control form-items", Attribute = "required" })
+        @Html.ValidationMessageFor(d => d.Name, "", new { id = "ValidationName" })
     </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(d => d.Age)
+        @Html.TextBoxFor(d => d.Age, new { id = "Age", @class = "form-control", Attribute = "required" })
+        @Html.ValidationMessageFor(d => d.Age, "", new { id = "ValidationAge" })
+        @*in both fields we can reference them by name that is by default, but here we add an id for both*@
+    </div>
+    <button type="button" onclick="jsAdd()" class="btn btn-primary mb-3">Guardar</button>
 </form>
 
+<label id="PersonAdded" style="display: none;">Person succesfully added!</label>
+
 <script>
+
+    //var form = $("#FormAddPerson");
+
+    //form.addEventListener('submit', function (e) {
+    //    e.preventDefault();
+    //});
+
     var url = "@Url.Content("~/People/Save")";
     function jsAdd() {
         fetch(url, {
@@ -35,15 +44,30 @@
                 "Content-Type": "application/json"
             }
         }).then(function (response) {
-            if (response.ok)
+            if (response.ok) {
                 return response.text();
-            else
+            } else {
                 alert("Ha ocurrido un error");
+            }
         }).then(function (data) {
             if (data != "1") {
-                alert(data);
+
+                const myJSON = data;
+                const myObj = JSON.parse(myJSON);
+
+                const n = myObj.filter(e => e.PropertyName == "Name");
+                $($('#ValidationName').get(0)).text(n[0].ErrorMessage);
+                
+                const a = myObj.filter(e => e.PropertyName == "Age");
+                $($('#ValidationAge').get(0)).text(a[0].ErrorMessage);
+                
             } else {
-                document.location.href = "@Url.Content("~/People/")";
+                $($('#PersonAdded').get(0)).show();
+                $($('#Name').get(0)).val("");
+                $($('#Age').get(0)).val("");
+                setTimeout(function () {
+                    $($('#PersonAdded').get(0)).hide();
+                }, 5000);
             }
         });
     }

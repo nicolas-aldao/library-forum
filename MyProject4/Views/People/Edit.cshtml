@@ -7,19 +7,17 @@
 
 
 <form>
-    <div class="row">
         @Html.HiddenFor(d => d.Id, new { id = "Id" })
-        <div class="form-group">
+        <div class="form-group mb-3">
             @Html.LabelFor(d => d.Name)
-            @Html.TextBoxFor(d => d.Name, new { id = "Name" })
+            @Html.TextBoxFor(d => d.Name, new { id = "Name", @class = "form-control" })
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             @Html.LabelFor(d => d.Age)
-            @Html.TextBoxFor(d => d.Age, new { id = "Age" })
+            @Html.TextBoxFor(d => d.Age, new { id = "Age", @class = "form-control" })
             @*in both fields we can reference them by name that is by default, but here we add an id for both*@
         </div>
-        <input type="button" value="Guardar" onclick="jsEdit()" />
-    </div>
+        <button type="button" onclick="jsEdit()" class="btn btn-primary mb-3">Guardar</button>
 </form>
 
 <script>
