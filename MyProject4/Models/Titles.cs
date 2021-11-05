@@ -22,7 +22,11 @@ namespace MyProject4.Models
     
         public int Id { get; set; }
         public string Name { get; set; }
+        public int GenreId { get; set; }
+        public int AuthorId { get; set; }
     
+        public virtual Genres Genres { get; set; }
+        public virtual Authors Authors { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Books> Books { get; set; }
     }

@@ -128,12 +128,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Authors.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModel\AddBookGroupViewModel.cs" />
+    <Compile Include="Models\ViewModel\AuthorViewModel.cs" />
     <Compile Include="Models\Books.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -152,12 +158,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DB.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Genres.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\People.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Titles.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\BookViewModel.cs" />
+    <Compile Include="Models\ViewModel\GenreViewModel.cs" />
+    <Compile Include="Models\ViewModel\ListBooksViewModel.cs" />
     <Compile Include="Models\ViewModel\ListPeopleViewModel.cs" />
     <Compile Include="Models\ViewModel\PeopleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -258,6 +270,9 @@
     <Content Include="Views\People\List.cshtml" />
     <Content Include="Views\People\Add.cshtml" />
     <Content Include="Views\People\Edit.cshtml" />
+    <Content Include="Views\Books\List.cshtml" />
+    <Content Include="Views\Books\Index.cshtml" />
+    <Content Include="Views\Books\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

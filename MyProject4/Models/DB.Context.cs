@@ -28,5 +28,7 @@ namespace MyProject4.Models
         public virtual DbSet<People> People { get; set; }
         public virtual DbSet<Books> Books { get; set; }
         public virtual DbSet<Titles> Titles { get; set; }
+        public virtual DbSet<Genres> Genres { get; set; }
+        public virtual DbSet<Authors> Authors { get; set; }
     }
 }

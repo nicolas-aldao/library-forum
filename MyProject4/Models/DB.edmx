@@ -9,12 +9,18 @@
     <EntitySet Name="People" EntityType="MVCProjectModel.Store.People" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Books" EntityType="MVCProjectModel.Store.Books" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Titles" EntityType="MVCProjectModel.Store.Titles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Genres" EntityType="MVCProjectModel.Store.Genres" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Authors" EntityType="MVCProjectModel.Store.Authors" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="GenresTitles" Association="MVCProjectModel.Store.GenresTitles">
+      <End Role="Genres" EntitySet="Genres" />
+      <End Role="Titles" EntitySet="Titles" />
+    </AssociationSet>
+    <AssociationSet Name="AuthorsTitles" Association="MVCProjectModel.Store.AuthorsTitles">
+      <End Role="Authors" EntitySet="Authors" />
+      <End Role="Titles" EntitySet="Titles" />
+    </AssociationSet>
     <AssociationSet Name="TitlesBooks" Association="MVCProjectModel.Store.TitlesBooks">
       <End Role="Titles" EntitySet="Titles" />
-      <End Role="Books" EntitySet="Books" />
-    </AssociationSet>
-    <AssociationSet Name="PeopleBooks" Association="MVCProjectModel.Store.PeopleBooks">
-      <End Role="People" EntitySet="People" />
       <End Role="Books" EntitySet="Books" />
     </AssociationSet>
   </EntityContainer>
@@ -32,7 +38,6 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TitleId" Type="int" Nullable="false" />
-    <Property Name="PersonId" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Titles">
     <Key>
@@ -40,7 +45,47 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GenreId" Type="int" Nullable="false" />
+    <Property Name="AuthorId" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="Genres">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Authors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fullname" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="GenresTitles">
+    <End Role="Genres" Type="MVCProjectModel.Store.Genres" Multiplicity="1" />
+    <End Role="Titles" Type="MVCProjectModel.Store.Titles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genres">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Titles">
+        <PropertyRef Name="GenreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuthorsTitles">
+    <End Role="Authors" Type="MVCProjectModel.Store.Authors" Multiplicity="1" />
+    <End Role="Titles" Type="MVCProjectModel.Store.Titles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Authors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Titles">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="TitlesBooks">
     <End Role="Titles" Type="MVCProjectModel.Store.Titles" Multiplicity="1" />
     <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
@@ -53,18 +98,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="PeopleBooks">
-    <End Role="People" Type="MVCProjectModel.Store.People" Multiplicity="0..1" />
-    <End Role="Books" Type="MVCProjectModel.Store.Books" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="People">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Books">
-        <PropertyRef Name="PersonId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -73,12 +106,18 @@
           <EntitySet Name="People" EntityType="MVCProjectModel.People" />
           <EntitySet Name="Books" EntityType="MVCProjectModel.Books" />
           <EntitySet Name="Titles" EntityType="MVCProjectModel.Titles" />
+          <EntitySet Name="Genres" EntityType="MVCProjectModel.Genres" />
+          <EntitySet Name="Authors" EntityType="MVCProjectModel.Authors" />
+          <AssociationSet Name="GenresTitles" Association="MVCProjectModel.GenresTitles">
+            <End Role="Genres" EntitySet="Genres" />
+            <End Role="Titles" EntitySet="Titles" />
+          </AssociationSet>
+          <AssociationSet Name="AuthorsTitles" Association="MVCProjectModel.AuthorsTitles">
+            <End Role="Authors" EntitySet="Authors" />
+            <End Role="Titles" EntitySet="Titles" />
+          </AssociationSet>
           <AssociationSet Name="TitlesBooks" Association="MVCProjectModel.TitlesBooks">
             <End Role="Titles" EntitySet="Titles" />
-            <End Role="Books" EntitySet="Books" />
-          </AssociationSet>
-          <AssociationSet Name="PeopleBooks" Association="MVCProjectModel.PeopleBooks">
-            <End Role="People" EntitySet="People" />
             <End Role="Books" EntitySet="Books" />
           </AssociationSet>
         </EntityContainer>
@@ -89,7 +128,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Age" Type="Int32" />
-          <NavigationProperty Name="Books" Relationship="MVCProjectModel.PeopleBooks" FromRole="People" ToRole="Books" />
         </EntityType>
         <EntityType Name="Books">
           <Key>
@@ -98,8 +136,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Titles" Relationship="MVCProjectModel.TitlesBooks" FromRole="Books" ToRole="Titles" />
           <Property Name="TitleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="People" Relationship="MVCProjectModel.PeopleBooks" FromRole="Books" ToRole="People" />
-          <Property Name="PersonId" Type="Int32" Nullable="true" />
         </EntityType>
         <EntityType Name="Titles">
           <Key>
@@ -107,8 +143,52 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Genres" Relationship="MVCProjectModel.GenresTitles" FromRole="Titles" ToRole="Genres" />
+          <Property Name="GenreId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Authors" Relationship="MVCProjectModel.AuthorsTitles" FromRole="Titles" ToRole="Authors" />
+          <Property Name="AuthorId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Books" Relationship="MVCProjectModel.TitlesBooks" FromRole="Titles" ToRole="Books" />
         </EntityType>
+        <EntityType Name="Genres">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Titles" Relationship="MVCProjectModel.GenresTitles" FromRole="Genres" ToRole="Titles" />
+        </EntityType>
+        <EntityType Name="Authors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fullname" Type="String" Nullable="false" />
+          <NavigationProperty Name="Titles" Relationship="MVCProjectModel.AuthorsTitles" FromRole="Authors" ToRole="Titles" />
+        </EntityType>
+        <Association Name="GenresTitles">
+          <End Type="MVCProjectModel.Genres" Role="Genres" Multiplicity="1" />
+          <End Type="MVCProjectModel.Titles" Role="Titles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genres">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Titles">
+              <PropertyRef Name="GenreId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AuthorsTitles">
+          <End Type="MVCProjectModel.Authors" Role="Authors" Multiplicity="1" />
+          <End Type="MVCProjectModel.Titles" Role="Titles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Titles">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="TitlesBooks">
           <End Type="MVCProjectModel.Titles" Role="Titles" Multiplicity="1" />
           <End Type="MVCProjectModel.Books" Role="Books" Multiplicity="*" />
@@ -118,18 +198,6 @@
             </Principal>
             <Dependent Role="Books">
               <PropertyRef Name="TitleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PeopleBooks">
-          <End Type="MVCProjectModel.People" Role="People" Multiplicity="0..1" />
-          <End Type="MVCProjectModel.Books" Role="Books" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="People">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Books">
-              <PropertyRef Name="PersonId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -153,7 +221,6 @@
         <MappingFragment StoreEntitySet="Books">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="TitleId" ColumnName="TitleId" />
-          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -162,6 +229,24 @@
         <MappingFragment StoreEntitySet="Titles">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="GenreId" ColumnName="GenreId" />
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Genres">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Genres)">
+        <MappingFragment StoreEntitySet="Genres">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Authors">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Authors)">
+        <MappingFragment StoreEntitySet="Authors">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Fullname" ColumnName="Fullname" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

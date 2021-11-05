@@ -12,10 +12,18 @@ namespace MyProject4.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class People
+    public partial class Genres
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Genres()
+        {
+            this.Titles = new HashSet<Titles>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> Age { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Titles> Titles { get; set; }
     }
 }

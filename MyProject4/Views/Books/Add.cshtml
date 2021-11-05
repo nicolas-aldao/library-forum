@@ -1,21 +1,29 @@
-﻿@model MyProject4.Models.ViewModel.PeopleViewModel
+﻿@using System.Collections.Generic;
+@using MyProject4.Models.ViewModel;
+
+@model AddBookGroupViewModel
 @{
     ViewBag.Title = "Add";
 }
 
 <h2>Add</h2>
 
-
-<form id="FormAddPerson">
+<form id="FormAddBook">
     <div class="form-group mb-3">
-        @Html.LabelFor(d => d.Name) 
+        @*@Html.LabelFor(d => d.Name)
         @Html.TextBoxFor(d => d.Name, new { id = "Name", @class = "form-control form-items", Attribute = "required" })
-        @Html.ValidationMessageFor(d => d.Name, "", new { id = "ValidationName" })
+        @Html.ValidationMessageFor(d => d.Name, "", new { id = "ValidationName" })*@
     </div>
     <div class="form-group mb-3">
-        @Html.LabelFor(d => d.Age)
-        @Html.TextBoxFor(d => d.Age, new { id = "Age", @class = "form-control", Attribute = "required" })
-        @Html.ValidationMessageFor(d => d.Age, "", new { id = "ValidationAge" })
+        @Html.LabelFor(d => d.Authors)
+        @Html.DropDownListFor(x => Model.Authors, new SelectList(Model.Authors, "Value", "Text"), new { @class = "btn btn-secondary dropdown-toggle form-control", id = "asd" })
+
+        @Html.DropDownListFor(emp => emp.AuthorId,
+                    new SelectList(Model.Authors, "Value", "Text"),
+                    "Select Author",
+                    new { @class = "form-control" })
+
+        @Html.ValidationMessageFor(x => Model.Authors, "", new { id = "ValidationAge" })
         @*in both fields we can reference them by name that is by default, but here we add an id for both*@
     </div>
     <button type="button" onclick="jsAdd()" class="btn btn-primary mb-3">Guardar</button>
@@ -51,10 +59,10 @@
 
                 const n = myObj.filter(e => e.PropertyName == "Name");
                 $($('#ValidationName').get(0)).text(n[0].ErrorMessage);
-                
+
                 const a = myObj.filter(e => e.PropertyName == "Age");
                 $($('#ValidationAge').get(0)).text(a[0].ErrorMessage);
-                
+
             } else {
                 $($('#PersonAdded').get(0)).show();
                 $($('#Name').get(0)).val("");

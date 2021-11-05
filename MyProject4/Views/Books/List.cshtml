@@ -1,5 +1,5 @@
 ﻿@using MyProject4.Models.ViewModel;
-@model List<ListPeopleViewModel>
+@model List<ListBooksViewModel>
 @{
     ViewBag.Title = "List";
 }
@@ -11,6 +11,8 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">Name</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Author</th>
             <th scope="col">Actions</th>
             <th scope="col"></th>
         </tr>
@@ -20,13 +22,16 @@
         {
         <tr>
             <td scope="row">@p.Name</td>
+            <td scope="row">@p.GenreName</td>
+            <td scope="row">@p.AuthorName</td>
             <td>
-                <input onclick="document.location.href='@Url.Content("~/People/edit/?id="+ p.Id)'" type="button" value="Edit" class="btn btn-info" />
+                <input @*onclick="document.location.href='@Url.Content("~/People/edit/?id="+ p.Id)'"*@ type="button" value="Edit" class="btn btn-info" />
             </td>
             <td>
-                <input onclick="jsDelete(@p.Id)" type="button" value="Delete" class="btn btn-danger" />
+                <input @*onclick="jsDelete(@p.Id)"*@ type="button" value="Delete" class="btn btn-danger" />
             </td>
         </tr>
         }
     </tbody>
 </table>
+

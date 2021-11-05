@@ -15,7 +15,6 @@
         <MappingFragment StoreEntitySet="Books">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="TitleId" ColumnName="TitleId" />
-          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -24,6 +23,24 @@
         <MappingFragment StoreEntitySet="Titles">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="GenreId" ColumnName="GenreId" />
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Genres">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Genres)">
+        <MappingFragment StoreEntitySet="Genres">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Authors">
+      <EntityTypeMapping TypeName="IsTypeOf(MVCProjectModel.Authors)">
+        <MappingFragment StoreEntitySet="Authors">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Fullname" ColumnName="Fullname" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Books";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <div class="row-content">
+        <input type="button" value="Add" onclick="document.location.href='@Url.Content("~/Books/Add")'" class="btn btn-success" />
+        <input type="button" value="Refresh" onclick="Get()" class="btn btn-warning" />
+    </div>
+</div>
+
+<div id="divLista">
+
+</div>
+
+<script>
+    urlGet = "@Url.Content("~/Books/list")"; // dinamic url
+
+    function Get() {
+        fetch(urlGet)
+            .then(function (response) { //callback
+                return response.text();
+            })
+            .then((data) => {
+                document.getElementById("divLista").innerHTML = data;
+            })
+    }
+
+    //delete
+    function jsDelete(id) {
+        fetch("@Url.Content("~/People/delete")", {
+            method: "POST",
+            body: JSON.stringify({
+                Id: id
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        }).then(function (response) {
+            if (response.ok)
+                return response.text();
+            else
+                alert("Ha ocurrido un error");
+        }).then(function (data) {
+            if (data != "1") {
+                alert(data);
+            } else {
+                Get();
+            }
+        });
+    }
+    Get();
+</script>
+
+
+
